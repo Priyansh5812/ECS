@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)src;$(ProjectDir)src\Headers;$(ProjectDir)src\Entities;$(ProjectDir)src\Components;$(ProjectDir)src\Components\Base;$(ProjectDir)src\Entities\Base;$(ProjectDir)src\Managers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,11 +137,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Source.cpp" />
+    <ClCompile Include="src\Components\CustomComponent.cpp" />
+    <ClCompile Include="src\Managers\ECSManager.cpp" />
+    <ClCompile Include="src\Components\Base\ComponentBase.cpp" />
+    <ClCompile Include="src\Entities\Base\Entity.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Constants.h" />
-    <ClInclude Include="src\Source.h" />
+    <ClInclude Include="src\Components\CustomComponent.h" />
+    <ClInclude Include="src\Managers\ECSManager.h" />
+    <ClInclude Include="src\Components\Base\ComponentBase.h" />
+    <ClInclude Include="src\Headers\Constants.h" />
+    <ClInclude Include="src\Entities\Base\Entity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
