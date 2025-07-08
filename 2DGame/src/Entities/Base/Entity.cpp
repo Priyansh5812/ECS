@@ -15,7 +15,7 @@ void Entity::InitializeTransform()
 
 void Entity::RegisterEntity()
 {	
-	this-> uid = ECSManager::GetConstInstance()->RegisterEntity(this);
+	this-> uid = ECSManager::GetConstInstance()->RegisterEntity(this);	
 }
 
 const Vector3& Entity::GetPosition()
@@ -42,15 +42,7 @@ const int& Entity::GetUID()const
 
 
 
-ComponentBase* Entity::TryGetComponent(std::type_info& type)
-{	
-	return nullptr;
-}
 
-void Entity::TryRemoveComponent(std::type_info& type)
-{
-
-}
 
 
 

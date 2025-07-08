@@ -18,19 +18,21 @@ int main()
 	camera.zoom = 1.0f;
 	SetTargetFPS(60);
 	ECSManager::CreateInstance();
-	Entity* entity = new Entity();
-	CustomComponent* comp = (CustomComponent*)entity->TryAddComponent<CustomComponent>().second;
-	comp->Start();
+	Entity* en = new Entity();
+	ECSManager::RunStartCalls();
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
 		ClearBackground(LIGHTGRAY);
 		BeginMode2D(camera);
+		ECSManager::RunUpdateCalls(GetFrameTime());
 		EndMode2D();
 		EndDrawing();
 	}
+	ECSManager::RunOnDestroyCalls();
 	ECSManager::Cleanup();
 	CloseWindow();
 	
 	return 0;
 }
+

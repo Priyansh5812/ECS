@@ -7,7 +7,7 @@
 #include <typeinfo>
 #include <stdexcept>
 #include <iostream>
-
+#include <memory>
 class ComponentBase;
 
 
@@ -20,9 +20,11 @@ class Entity
 		virtual void Cleanup();
 		const int& GetUID() const;
 		template<typename T>
-		std::pair<bool , T*> TryAddComponent();
-		ComponentBase* TryGetComponent(std::type_info& type);
-		void TryRemoveComponent(std::type_info& type);
+		std::shared_ptr<T> TryAddComponent();
+		template<typename T>
+		std::shared_ptr<T> TryGetComponent();
+		template<typename T>
+		void TryRemoveComponent();
 
 	private:
 		Matrix Transform;
@@ -38,11 +40,11 @@ class Entity
 
 
 template<typename T>
-std::pair<bool, T*> Entity::TryAddComponent()
+std::shared_ptr<T> Entity::TryAddComponent()
 {
 	try
 	{
-		return ECSManager::RegisterComponent<T>(this);
+		return ECSManager::RegisterComponent<T>(this).second;
 	}
 	catch (const std::runtime_error& error)
 	{
@@ -50,5 +52,32 @@ std::pair<bool, T*> Entity::TryAddComponent()
 		std::cout << "Reason : " << error.what() << std::endl;
 		return { false , nullptr };
 	}
+}
 
+template<typename T>
+void Entity::TryRemoveComponent()
+{
+	try
+	{
+		ECSManager::UnregisterComponent<T>(this);
+	}
+	catch (const std::runtime_error& error)
+	{
+		std::cout << "Caught exception while removing component of type : " << typeid(T).name() << std::endl;
+		std::cout << "Reason : " << error.what() << std::endl;
+	}
+}
+
+template<typename T>
+std::shared_ptr<T> Entity::TryGetComponent()
+{
+	try
+	{
+		return ECSManager::GetComponent<T>(this);
+	}
+	catch (const std::runtime_error& error)
+	{
+		std::cout << "Caught exception while getting component of type : " << typeid(T).name() << std::endl;
+		std::cout << "Reason : " << error.what() << std::endl;
+	}
 }

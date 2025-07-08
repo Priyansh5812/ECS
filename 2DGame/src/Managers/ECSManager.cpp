@@ -2,12 +2,12 @@
 #include "Entity.h"
 #include <ComponentBase.h>
 
-
-
-
 int ECSManager::globalIdCounter = 0;
-ECSManager* ECSManager::m_instance = nullptr;
+std::unique_ptr<ECSManager> ECSManager::m_instance;
 
+std::vector<std::pair<size_t, std::function<void()>>> ECSManager::OnStartCalls;
+std::vector<std::pair<size_t , std::function<void(const float&)>>> ECSManager::OnUpdateCalls;	
+std::vector<std::pair<size_t, std::function<void()>>> ECSManager::OnDestroyCalls;
 
 //Maintaining Cache Locality from the start
 ECSManager::ECSManager()
@@ -19,19 +19,19 @@ ECSManager::ECSManager()
 //Ensures creating Instance
 void ECSManager::CreateInstance()
 {
-	m_instance = new ECSManager();
+	m_instance = std::make_unique<ECSManager>();
 }
 
 
 //Will be used for private scope
-ECSManager* ECSManager::GetInstance()
+std::unique_ptr<ECSManager>& ECSManager::GetInstance()
 {	
 	return m_instance;
 }
 
 
 // Will be used for public scope
-const ECSManager* ECSManager::GetConstInstance()
+const std::unique_ptr<ECSManager>& ECSManager::GetConstInstance()
 {	
 	return GetInstance();
 }
@@ -39,26 +39,18 @@ const ECSManager* ECSManager::GetConstInstance()
 // Cleanup what has been allocated
 void ECSManager::Cleanup()
 {	
-	auto& entityDir = ECSManager::GetInstance()->entityDir;
-	auto& comps = ECSManager::GetInstance()->globalComponentList;
-	for (auto i : entityDir)
-	{
-		i.second.associatedComps.clear();
+	for (auto i : ECSManager::GetInstance()->entityDir)
+	{	
+		delete i.second;
 		delete i.first;
 	}
 
-	while (!comps.empty())
-	{
-		ComponentBase* comp = comps.back();
-		comps.pop_back();
-		delete comp;
-	}
-
-	delete m_instance;
-	m_instance = nullptr;
-
+	OnStartCalls.clear();
+	OnUpdateCalls.clear();
+	OnDestroyCalls.clear();
 }
 
+// Entity Registration
 const int& ECSManager::RegisterEntity(Entity* entity)
 {	
 	if (!entity)
@@ -73,11 +65,11 @@ const int& ECSManager::RegisterEntity(Entity* entity)
 	if (dir.find(entity) != dir.end())
 	{
 		std::cout << "Entity already exists" << std::endl;
-		return dir[entity].entityID;
+		return dir[entity]->entityID;
 	}
 
 	// Allocating this on heap due, to Entity data can also be very vast
-	dir[entity] = *(new EntityData(globalIdCounter++));
+	dir[entity] = new EntityData(globalIdCounter++);
 	
 	std::cout << "Entity successfully registered at " << globalIdCounter - 1 << std::endl;
 
@@ -86,5 +78,31 @@ const int& ECSManager::RegisterEntity(Entity* entity)
 
 
 
+void ECSManager::RunStartCalls()
+{
 
+	for (auto i : OnStartCalls)
+	{
+		if (i.second)
+			i.second();
+	}
+}
+
+void ECSManager::RunUpdateCalls(const float& deltaTime)
+{
+	for (auto i : OnUpdateCalls)
+	{
+		if (i.second)
+			i.second(deltaTime);
+	}
+}
+
+void ECSManager::RunOnDestroyCalls()
+{
+	for (auto i : OnDestroyCalls)
+	{
+		if (i.second)
+			i.second();
+	}
+}
 
