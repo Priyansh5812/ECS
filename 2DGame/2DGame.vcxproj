@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)src;$(ProjectDir)src\Headers;$(ProjectDir)src\Entities;$(ProjectDir)src\Components;$(ProjectDir)src\Components\Base;$(ProjectDir)src\Entities\Base;$(ProjectDir)src\Managers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)src;$(ProjectDir)src\Headers;$(ProjectDir)src\Entities;$(ProjectDir)src\Components;$(ProjectDir)src\Components\Base;$(ProjectDir)src\Entities\Base;$(ProjectDir)src\Managers;$(ProjectDir)src\Entities\Camera;$(ProjectDir)src\Entities\Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,18 +137,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Components\CustomComponent.cpp" />
+    <ClCompile Include="src\Components\InputComponent.cpp" />
+    <ClCompile Include="src\Components\Sprite.cpp" />
+    <ClCompile Include="src\Components\CameraComponent.cpp" />
+    <ClCompile Include="src\Entities\Scene\Scene.cpp" />
     <ClCompile Include="src\Managers\ECSManager.cpp" />
     <ClCompile Include="src\Components\Base\ComponentBase.cpp" />
-    <ClCompile Include="src\Entities\Base\Entity.cpp" />
+    <ClCompile Include="src\Entities\Base\EntityBase.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\CustomComponent.h" />
+    <ClInclude Include="src\Components\InputComponent.h" />
+    <ClInclude Include="src\Components\Sprite.h" />
+    <ClInclude Include="src\Components\CameraComponent.h" />
+    <ClInclude Include="src\Entities\Scene\Scene.h" />
     <ClInclude Include="src\Managers\ECSManager.h" />
     <ClInclude Include="src\Components\Base\ComponentBase.h" />
     <ClInclude Include="src\Headers\Constants.h" />
-    <ClInclude Include="src\Entities\Base\Entity.h" />
+    <ClInclude Include="src\Entities\Base\EntityBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,13 +1,15 @@
 #include "ECSManager.h"
-#include "Entity.h"
+#include "EntityBase.h"
 #include <ComponentBase.h>
+
 
 int ECSManager::globalIdCounter = 0;
 std::unique_ptr<ECSManager> ECSManager::m_instance;
+bool ECSManager::isUnderRuntime = false;
 
-std::vector<std::pair<size_t, std::function<void()>>> ECSManager::OnStartCalls;
-std::vector<std::pair<size_t , std::function<void(const float&)>>> ECSManager::OnUpdateCalls;	
-std::vector<std::pair<size_t, std::function<void()>>> ECSManager::OnDestroyCalls;
+std::vector<std::function<void()>> ECSManager::OnStartCalls;
+std::vector<std::function<void(const float&)>> ECSManager::OnUpdateCalls;	
+std::vector<std::function<void()>> ECSManager::OnDestroyCalls;
 
 //Maintaining Cache Locality from the start
 ECSManager::ECSManager()
@@ -20,6 +22,7 @@ ECSManager::ECSManager()
 void ECSManager::CreateInstance()
 {
 	m_instance = std::make_unique<ECSManager>();
+	
 }
 
 
@@ -39,19 +42,32 @@ const std::unique_ptr<ECSManager>& ECSManager::GetConstInstance()
 // Cleanup what has been allocated
 void ECSManager::Cleanup()
 {	
-	for (auto i : ECSManager::GetInstance()->entityDir)
-	{	
-		delete i.second;
-		delete i.first;
+
+	isUnderRuntime = false;
+	std::vector<EntityBase*> toDestroy;
+	toDestroy.reserve(ECSManager::GetInstance()->entityDir.size());
+	for (auto& i : ECSManager::GetInstance()->entityDir)
+	{
+		toDestroy.push_back(i.first);
 	}
+
+	while (toDestroy.size() > 0)
+	{
+		EntityBase* en = toDestroy.back();
+		ECSManager::DestroyEntity(en);
+		toDestroy.pop_back();
+	}
+
+	
 
 	OnStartCalls.clear();
 	OnUpdateCalls.clear();
 	OnDestroyCalls.clear();
+
 }
 
 // Entity Registration
-const int& ECSManager::RegisterEntity(Entity* entity)
+const int& ECSManager::RegisterEntity(EntityBase* entity)
 {	
 	if (!entity)
 	{
@@ -69,22 +85,22 @@ const int& ECSManager::RegisterEntity(Entity* entity)
 	}
 
 	// Allocating this on heap due, to Entity data can also be very vast
-	dir[entity] = new EntityData(globalIdCounter++);
-	
+	//dir[entity] = new EntityData(globalIdCounter++);
+	dir[entity] = std::make_shared<EntityData>(globalIdCounter++);
+
 	std::cout << "Entity successfully registered at " << globalIdCounter - 1 << std::endl;
 
 	return globalIdCounter - 1;
 }
 
 
-
 void ECSManager::RunStartCalls()
 {
-
+	isUnderRuntime = true;
 	for (auto i : OnStartCalls)
 	{
-		if (i.second)
-			i.second();
+		if (i)
+			i();
 	}
 }
 
@@ -92,8 +108,8 @@ void ECSManager::RunUpdateCalls(const float& deltaTime)
 {
 	for (auto i : OnUpdateCalls)
 	{
-		if (i.second)
-			i.second(deltaTime);
+		if (i)
+			i(deltaTime);
 	}
 }
 
@@ -101,8 +117,11 @@ void ECSManager::RunOnDestroyCalls()
 {
 	for (auto i : OnDestroyCalls)
 	{
-		if (i.second)
-			i.second();
+		if (i)
+			i();
 	}
 }
+
+
+
 

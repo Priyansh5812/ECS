@@ -11,14 +11,22 @@
 class ComponentBase;
 
 
-class Entity
+class EntityBase
 {
 	public:
-		Entity();
+		EntityBase();
+		virtual ~EntityBase();
+
+	public:
 		const Vector3& GetPosition();
 		void AddPosition(const Vector3& position);
-		virtual void Cleanup();
-		const int& GetUID() const;
+		
+	public:
+		virtual void OnCreated() = 0;
+		virtual void OnDestroyed() = 0;
+
+
+	public:
 		template<typename T>
 		std::shared_ptr<T> TryAddComponent();
 		template<typename T>
@@ -26,21 +34,22 @@ class Entity
 		template<typename T>
 		void TryRemoveComponent();
 
-	private:
+	protected:
+		int globalEntityIndex = -1;
 		Matrix Transform;
 		Vector3 m_position = { 0,0,0 };
 		Vector3 m_rotation = { 0,0,0 };
 		Vector3 m_scale = { 1,1,1 };
 		void InitializeTransform();
 		void RegisterEntity();
-		int uid = -1;
+		
 };
 
 
 
 
 template<typename T>
-std::shared_ptr<T> Entity::TryAddComponent()
+std::shared_ptr<T> EntityBase::TryAddComponent()
 {
 	try
 	{
@@ -50,12 +59,12 @@ std::shared_ptr<T> Entity::TryAddComponent()
 	{
 		std::cout << "Caught exception while creating component of type : " << typeid(T).name() << std::endl;
 		std::cout << "Reason : " << error.what() << std::endl;
-		return { false , nullptr };
+		return nullptr;
 	}
 }
 
 template<typename T>
-void Entity::TryRemoveComponent()
+void EntityBase::TryRemoveComponent()
 {
 	try
 	{
@@ -69,7 +78,7 @@ void Entity::TryRemoveComponent()
 }
 
 template<typename T>
-std::shared_ptr<T> Entity::TryGetComponent()
+std::shared_ptr<T> EntityBase::TryGetComponent()
 {
 	try
 	{
@@ -81,3 +90,32 @@ std::shared_ptr<T> Entity::TryGetComponent()
 		std::cout << "Reason : " << error.what() << std::endl;
 	}
 }
+
+
+
+class Entity : public EntityBase
+{
+public:
+	Entity() : EntityBase()
+	{
+		
+	}
+
+public:
+	virtual void OnCreated() override
+	{
+		std::cout << "Entity Created" << std::endl;
+	}
+	virtual void OnDestroyed() override
+	{
+		std::cout << "Entity Destroyed" << std::endl;
+	}
+
+public:
+	~Entity()
+	{
+		
+	}
+
+};
+

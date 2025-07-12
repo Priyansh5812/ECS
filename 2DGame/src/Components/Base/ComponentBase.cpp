@@ -1,7 +1,7 @@
 #include "ComponentBase.h"
-#include <Entity.h>
+#include <EntityBase.h>
 #include <iostream>
-ComponentBase::ComponentBase(Entity* attachedEntity)
+ComponentBase::ComponentBase(EntityBase* attachedEntity)
 {
 	this->attachedEntity = attachedEntity;	
 	std::cout << "Entity Attached" << std::endl;	
@@ -12,7 +12,7 @@ void ComponentBase::Update(const float& deltaTime)
 	//noop
 }
 
-const Entity* ComponentBase::GetAttachedEntity() const
+const EntityBase* ComponentBase::GetAttachedEntity() const
 {
 	return this->attachedEntity;
 }
