@@ -36,7 +36,7 @@
     <ClCompile Include="src\Components\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Components\InputComponent.cpp">
+    <ClCompile Include="src\Components\MovementComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="src\Components\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\InputComponent.h">
+    <ClInclude Include="src\Components\MovementComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

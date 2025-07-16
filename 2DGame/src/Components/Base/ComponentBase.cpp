@@ -7,10 +7,10 @@ ComponentBase::ComponentBase(EntityBase* attachedEntity)
 	std::cout << "Entity Attached" << std::endl;	
 }
 
-void ComponentBase::Update(const float& deltaTime)
-{ 
-	//noop
-}
+//void ComponentBase::Update(const float& deltaTime)
+//{ 
+//	//noop
+//}
 
 const EntityBase* ComponentBase::GetAttachedEntity() const
 {

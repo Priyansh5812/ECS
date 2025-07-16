@@ -19,7 +19,9 @@ class EntityBase
 
 	public:
 		const Vector3& GetPosition();
+		const Vector2& GetPosition2D();
 		void AddPosition(const Vector3& position);
+		void AddPosition(const Vector2& position);
 		
 	public:
 		virtual void OnCreated() = 0;
@@ -42,6 +44,7 @@ class EntityBase
 		Vector3 m_scale = { 1,1,1 };
 		void InitializeTransform();
 		void RegisterEntity();
+		
 		
 };
 

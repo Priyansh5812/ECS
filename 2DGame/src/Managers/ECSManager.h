@@ -128,11 +128,10 @@ inline T*& ECSManager::CreateEntity()
 template<typename T1>
 inline void ECSManager::DestroyEntity(T1* entity)
 {
-	// DESIGN FLAW HERE... CANNOT CHECK WHETHER THE ENTITY IS A REFERENCE OF EntityBaseClass IF IT GETS PASSED AS EntityBase 
-
+	
 	if (entity == nullptr || dynamic_cast<Entity*>(entity) == nullptr)
 	{	
-		std::cout << "Entity not destroyed, because it does not inherit from class 'Entity'" << std::endl;
+		std::cout << "Entity not destroyed, because it does not inherit from class 'Entity' or 'EntityBase'" << std::endl;
 		return;
 	}
 
@@ -238,7 +237,6 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 
 
 				//--------- ADDING REQUIRED FUNCTION CALLS ----------
-
 				int StartMethodIndex = -1, UpdateMethodIndex = -1, destroyMethodIndex = -1;
 
 				if (isUnderRuntime)

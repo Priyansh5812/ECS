@@ -3,19 +3,18 @@
 CameraComponent::CameraComponent(EntityBase* attachedEntity) : ComponentBase(attachedEntity)
 {
 	this->camera = std::make_shared<Camera2D>();
-	this->canTick = true;
+	this->canTick = false;
 	std::cout << "Created Camera Component" << std::endl;
 }
 
 void CameraComponent::Start()
 {	
-	//ConfigureCamera(data);
+	ConfigureCamera();
 }
 
 void CameraComponent::Update(const float& deltaTime)
 {
-
-	
+	//noop
 }
 
 void CameraComponent::OnDestroy()
@@ -29,13 +28,10 @@ std::shared_ptr<Camera2D> CameraComponent::GetCamera() const
 }
 
 
-void CameraComponent::ConfigureCamera(const CameraInitData& data)
+void CameraComponent::ConfigureCamera()
 {	
-	Vector3 pos = data.targetEntity->GetPosition();
-	pos = Vector3Add(this->attachedEntity->GetPosition(), pos);
-	this->camera->target = { pos.x, pos.y };
-	this->camera->offset = data.screenOffset;
-	std::cout << data.screenOffset.x << " : " << data.screenOffset.y << std::endl;
-	this->camera->rotation = data.rotation;
-	this->camera->zoom = data.zoom;
+	this->camera->target = {0.0f,0.0f};
+	this->camera->offset = { SCREEN_WIDTH / 2 , SCREEN_HEIGHT / 2 };
+	this->camera->rotation = 0.0f;
+	this->camera->zoom = 0.0f;
 }

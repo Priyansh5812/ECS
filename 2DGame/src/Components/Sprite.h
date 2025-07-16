@@ -1,5 +1,6 @@
 #pragma once
 #include <ComponentBase.h>
+struct Vector2;
 class Sprite : public ComponentBase
 {	
 	public:
@@ -7,6 +8,8 @@ class Sprite : public ComponentBase
 		virtual void Start() override; // Initialization 
 		virtual void Update(const float& deltaTime) override; // OnTick
 		virtual void OnDestroy() override;// Deinitialization
+	public:
+		Vector2 GetArea();
 	private:
 		void Draw();
 };
