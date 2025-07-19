@@ -12,8 +12,11 @@ public:
 	virtual void Start() override; // Initialization 
 	virtual void Update(const float& deltaTime) override; // OnTick
 	virtual void OnDestroy() override;// Deinitialization
+
+public:
 	std::shared_ptr<Camera2D> GetCamera() const;
 	void ConfigureCamera();
+
 private:
 	std::shared_ptr<Camera2D> camera;
 

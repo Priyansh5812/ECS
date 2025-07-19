@@ -8,6 +8,7 @@ EntityBase::EntityBase()
 }
 
 
+
 void EntityBase::InitializeTransform()
 {
 	Transform = MatrixIdentity(); // Reset all the values
@@ -31,6 +32,18 @@ const Vector2& EntityBase::GetPosition2D()
 	return pos2D;
 }
 
+void EntityBase::SetPosition(const Vector3& position)
+{
+	Transform.m12 = position.x;
+	Transform.m13 = position.y;
+	Transform.m14 = position.z;
+}
+
+void EntityBase::SetPosition(const Vector2& position)
+{
+	this->SetPosition({ position.x , position.y , Transform.m14});
+}
+
 
 void EntityBase::AddPosition(const Vector3& position)
 {
@@ -42,6 +55,16 @@ void EntityBase::AddPosition(const Vector2& position)
 {	
 	Matrix tm = MatrixTranslate(position.x, position.y, 0.0f);
 	Transform = MatrixAdd(Transform, tm);
+}
+
+void EntityBase::SetActive(bool value)
+{
+	this->isActive = value;
+}
+
+const bool& EntityBase::GetActive()
+{
+	return this->isActive;
 }
 
 EntityBase::~EntityBase()

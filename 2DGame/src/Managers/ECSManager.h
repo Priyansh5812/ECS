@@ -89,7 +89,7 @@ private:
 	
 	// the format of storing lifecycle calls is the (typeId(Component) , Function Pointer)
 	static std::vector<std::function<void()>> OnStartCalls; // Array to store the Start Calls
-	static std::vector<std::function<void(const float&)>> OnUpdateCalls; // Array to store the UpdateCalls
+	static std::vector<std::pair<std::function<void(const float&) > , EntityBase*>> OnUpdateCalls; // Array to store the UpdateCalls
 	static std::vector<std::function<void()>>OnDestroyCalls; // Array to store the Destroy Calls
 
 private:
@@ -157,7 +157,10 @@ inline void ECSManager::DestroyEntity(T1* entity)
 
 			// removing the lifecycle calls (Update), if any
 			if (UpdateMethodIndex != -1)
-				OnUpdateCalls[UpdateMethodIndex] = nullptr;
+			{
+				OnUpdateCalls[UpdateMethodIndex].first = nullptr;
+				OnUpdateCalls[UpdateMethodIndex].second = nullptr;
+			}
 
 			// removing the lifecycle calls (OnDestroy), if any
 			if (DestroyMethodIndex != -1)
@@ -254,11 +257,16 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 
 
 				if (comp->GetCanTick())
-				{
-					OnUpdateCalls.push_back([comp](const float& deltaTime)
+				{	
+					std::pair<std::function<void(const float&) >, EntityBase*> pair = std::make_pair(nullptr,nullptr);
+					pair.first = [comp](const float& deltaTime)
 						{
 							comp->Update(deltaTime);
-						});
+						};
+
+					pair.second = entity;
+
+					OnUpdateCalls.push_back(pair);
 					UpdateMethodIndex = OnUpdateCalls.size() - 1;
 				}
 
@@ -311,10 +319,10 @@ inline bool ECSManager::UnregisterComponent(EntityBase* entity)
 				for (int i = 0; i < data->associatedComps.size(); i++)
 				{
 					if (data->associatedComps[i].first == typeid(T).hash_code())
-					{	
+					{
 						// Remove component from global list of components
 						globalComponentList[data->associatedComps[i].second.first] = nullptr;
-						
+
 						int StartMethodIndex = data->associatedComps[i].second.second.StartMethodIndex;
 						int UpdateMethodIndex = data->associatedComps[i].second.second.UpdateMethodIndex;
 						int DestroyMethodIndex = data->associatedComps[i].second.second.DestroyMethodIndex;
@@ -322,10 +330,13 @@ inline bool ECSManager::UnregisterComponent(EntityBase* entity)
 						// removing the lifecycle calls (Start), if any
 						if (StartMethodIndex != -1)
 							OnStartCalls[StartMethodIndex] = nullptr;
-						
+
 						// removing the lifecycle calls (Update), if any
 						if (UpdateMethodIndex != -1)
-							OnUpdateCalls[UpdateMethodIndex] = nullptr;
+						{
+							OnUpdateCalls[UpdateMethodIndex] .first= nullptr;
+							OnUpdateCalls[UpdateMethodIndex] .second= nullptr;
+						}
 
 						// removing the lifecycle calls (OnDestroy), if any
 						if (DestroyMethodIndex != -1)

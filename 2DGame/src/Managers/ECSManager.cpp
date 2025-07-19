@@ -8,7 +8,7 @@ std::unique_ptr<ECSManager> ECSManager::m_instance;
 bool ECSManager::isUnderRuntime = false;
 
 std::vector<std::function<void()>> ECSManager::OnStartCalls;
-std::vector<std::function<void(const float&)>> ECSManager::OnUpdateCalls;	
+std::vector<std::pair<std::function<void(const float&)> , EntityBase*>> ECSManager::OnUpdateCalls;	
 std::vector<std::function<void()>> ECSManager::OnDestroyCalls;
 
 //Maintaining Cache Locality from the start
@@ -22,7 +22,6 @@ ECSManager::ECSManager()
 void ECSManager::CreateInstance()
 {
 	m_instance = std::make_unique<ECSManager>();
-	
 }
 
 
@@ -97,28 +96,35 @@ const int& ECSManager::RegisterEntity(EntityBase* entity)
 void ECSManager::RunStartCalls()
 {
 	isUnderRuntime = true;
-	for (auto i : OnStartCalls)
+
+	for (int i = 0; i < OnStartCalls.size(); i++)
 	{
-		if (i)
-			i();
+		if (OnStartCalls[i])
+		{
+			OnStartCalls[i]();
+		}
 	}
 }
 
 void ECSManager::RunUpdateCalls(const float& deltaTime)
 {
-	for (auto i : OnUpdateCalls)
+	for (int i = 0; i < OnUpdateCalls.size(); i++)
 	{
-		if (i)
-			i(deltaTime);
+		if (OnUpdateCalls[i].first && OnUpdateCalls[i].second->GetActive())
+		{
+			OnUpdateCalls[i].first(deltaTime);
+		}
 	}
 }
 
 void ECSManager::RunOnDestroyCalls()
 {
-	for (auto i : OnDestroyCalls)
+	for (int i = 0; i < OnDestroyCalls.size(); i++)
 	{
-		if (i)
-			i();
+		if (OnDestroyCalls[i])
+		{
+			OnDestroyCalls[i]();
+		}
 	}
 }
 

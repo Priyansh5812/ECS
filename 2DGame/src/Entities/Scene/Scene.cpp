@@ -1,8 +1,10 @@
 #include "Scene.h"
 #include <CameraComponent.h>
 #include <ECSManager.h>
+#include <BulletFactory.h>
 #include <Sprite.h>
 #include <MovementComponent.h>
+#include <ShooterComponent.h>
 Scene::Scene()
 {
 	this->Init();
@@ -11,6 +13,7 @@ Scene::Scene()
 void Scene::Init()
 {
 	ECSManager::CreateInstance();
+	BulletFactory::EnsureCreation();
 	LoadBasicEnts();
 	ECSManager::RunStartCalls();// Sets the runtime flag to true...
 }
@@ -30,7 +33,7 @@ void Scene::Unload()
 {
 	ECSManager::RunOnDestroyCalls();	
 	ECSManager::Cleanup(); // Sets  Runtime Flags to false...
-	
+	BulletFactory::Cleanup(); // Release an bullet resources
 }
 
 
@@ -45,6 +48,7 @@ void Scene::LoadPlayer()
 	player = ECSManager::CreateEntity<Entity>();
 	player->TryAddComponent<Sprite>();
 	player->TryAddComponent<MovementComponent>();
+	player->TryAddComponent<ShooterComponent>();
 }
 
 void Scene::LoadCamera()

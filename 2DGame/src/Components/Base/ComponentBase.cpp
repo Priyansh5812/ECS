@@ -4,7 +4,6 @@
 ComponentBase::ComponentBase(EntityBase* attachedEntity)
 {
 	this->attachedEntity = attachedEntity;	
-	std::cout << "Entity Attached" << std::endl;	
 }
 
 //void ComponentBase::Update(const float& deltaTime)

@@ -22,7 +22,10 @@ class EntityBase
 		const Vector2& GetPosition2D();
 		void AddPosition(const Vector3& position);
 		void AddPosition(const Vector2& position);
-		
+		void SetPosition(const Vector3& position);
+		void SetPosition(const Vector2& position);
+		void SetActive(bool value);
+		const bool& GetActive();
 	public:
 		virtual void OnCreated() = 0;
 		virtual void OnDestroyed() = 0;
@@ -42,6 +45,7 @@ class EntityBase
 		Vector3 m_position = { 0,0,0 };
 		Vector3 m_rotation = { 0,0,0 };
 		Vector3 m_scale = { 1,1,1 };
+		bool isActive = true;
 		void InitializeTransform();
 		void RegisterEntity();
 		
