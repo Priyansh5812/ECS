@@ -10,8 +10,7 @@ BulletComponent::BulletComponent(EntityBase* attachedEntity) : ComponentBase(att
 
 void BulletComponent::Start()
 {
-	sprite = this->attachedEntity->TryAddComponent<Sprite>();
-	sprite->SetDefaultSpriteBehaviour(RECTANGLE);
+	sprite = this->attachedEntity->TryAddComponent<Sprite>("./Images/Player.png", Vector2{5.0f, 20.0f});
 }
 
 void BulletComponent::Update(const float& deltaTime)
@@ -27,7 +26,7 @@ void BulletComponent::OnDestroy()
 
 void BulletComponent::BulletMove(const float& deltaTime)
 {
-	Vector2 add = { 0.0f , -5.0f * 20.0f * deltaTime };
+	Vector2 add = { 0.0f , -5.0f * 50.0f * deltaTime };
 	this->attachedEntity->AddPosition(add);
 }
 

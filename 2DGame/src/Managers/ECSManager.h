@@ -64,8 +64,8 @@ public:
 	template<typename T1>
 	static void DestroyEntity(T1* entity);
 
-	template<typename T>
-	static std::pair<bool , std::shared_ptr<T>> RegisterComponent(EntityBase* entity);
+	template<typename T, typename... Args>
+	static std::pair<bool , std::shared_ptr<T>> RegisterComponent(EntityBase* entity, Args&&...args);
 
 	template <typename T>
 	static bool UnregisterComponent(EntityBase* entity);
@@ -188,15 +188,8 @@ inline void ECSManager::DestroyEntity(T1* entity)
 
 
 
-
-
-
-
-
-
-
-template<typename T>
-inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityBase* entity)
+template<typename T, typename... Args>
+inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityBase* entity, Args&&... args)
 {	
 	if (!entity)
 	{
@@ -235,7 +228,7 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 					}
 				}
 
-				std::shared_ptr<T> comp = std::make_shared<T>(entity);
+				std::shared_ptr<T> comp = std::make_shared<T>(entity, std::forward<Args>(args)...);
 				globalComponentList.push_back(comp);	
 
 

@@ -110,6 +110,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)src;$(ProjectDir)src\Headers;$(ProjectDir)src\Entities;$(ProjectDir)src\Components;$(ProjectDir)src\Components\Base;$(ProjectDir)src\Entities\Base;$(ProjectDir)src\Managers;$(ProjectDir)src\Entities\Camera;$(ProjectDir)src\Entities\Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\BulletComponent.cpp" />
+    <ClCompile Include="src\Managers\BulletFactory.cpp" />
+    <ClCompile Include="src\Components\ShooterComponent.cpp" />
     <ClCompile Include="src\Components\MovementComponent.cpp" />
     <ClCompile Include="src\Components\Sprite.cpp" />
     <ClCompile Include="src\Components\CameraComponent.cpp" />
@@ -145,8 +149,12 @@
     <ClCompile Include="src\Components\Base\ComponentBase.cpp" />
     <ClCompile Include="src\Entities\Base\EntityBase.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Managers\TextureHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\BulletComponent.h" />
+    <ClInclude Include="src\Managers\BulletFactory.h" />
+    <ClInclude Include="src\Components\ShooterComponent.h" />
     <ClInclude Include="src\Components\MovementComponent.h" />
     <ClInclude Include="src\Components\Sprite.h" />
     <ClInclude Include="src\Components\CameraComponent.h" />
@@ -155,6 +163,10 @@
     <ClInclude Include="src\Components\Base\ComponentBase.h" />
     <ClInclude Include="src\Headers\Constants.h" />
     <ClInclude Include="src\Entities\Base\EntityBase.h" />
+    <ClInclude Include="src\Managers\TextureHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\Player.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,13 +5,15 @@
 #include <Sprite.h>
 #include <MovementComponent.h>
 #include <ShooterComponent.h>
+
 Scene::Scene()
 {
 	this->Init();
 }
 
 void Scene::Init()
-{
+{	
+	
 	ECSManager::CreateInstance();
 	BulletFactory::EnsureCreation();
 	LoadBasicEnts();
@@ -46,7 +48,7 @@ Scene::~Scene()
 void Scene::LoadPlayer()
 {
 	player = ECSManager::CreateEntity<Entity>();
-	player->TryAddComponent<Sprite>();
+	player->TryAddComponent<Sprite>("./Images/Player.png", Vector2{100.0f, 100.0f});
 	player->TryAddComponent<MovementComponent>();
 	player->TryAddComponent<ShooterComponent>();
 }

@@ -20,7 +20,7 @@ void ShooterComponent::Update(const float& deltaTime)
 	{
 		EntityBase* bullet = BulletFactory::PoolGetBullet();
 		bullet->SetPosition(this->attachedEntity->GetPosition2D());
-		Vector2 pos = { 0.0f , -5.0f };
+		Vector2 pos = { -22.5f , -45.0f };
 		bullet->AddPosition(pos);
 		bullet->SetActive(true);
 	}

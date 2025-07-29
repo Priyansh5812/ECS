@@ -32,8 +32,8 @@ class EntityBase
 
 
 	public:
-		template<typename T>
-		std::shared_ptr<T> TryAddComponent();
+		template<typename T, typename... Args>
+		std::shared_ptr<T> TryAddComponent(Args&&... args);
 		template<typename T>
 		std::shared_ptr<T> TryGetComponent();
 		template<typename T>
@@ -55,12 +55,12 @@ class EntityBase
 
 
 
-template<typename T>
-std::shared_ptr<T> EntityBase::TryAddComponent()
+template<typename T, typename... Args>
+std::shared_ptr<T> EntityBase::TryAddComponent(Args&&... args)
 {
 	try
 	{
-		return ECSManager::RegisterComponent<T>(this).second;
+		return ECSManager::RegisterComponent<T>(this, std::forward<Args>(args)...).second;
 	}
 	catch (const std::runtime_error& error)
 	{

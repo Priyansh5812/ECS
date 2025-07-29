@@ -8,7 +8,6 @@ int main()
 {	
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Test");
 	SetTargetFPS(60);
-
 	//--- Scene Initialization ---
 	Scene* scene = new Scene();
 	
@@ -21,4 +20,3 @@ int main()
 	delete scene;
 	return 0;
 }
-
