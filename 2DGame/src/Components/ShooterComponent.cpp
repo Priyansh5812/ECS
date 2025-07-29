@@ -18,14 +18,25 @@ void ShooterComponent::Update(const float& deltaTime)
 {
 	if (IsKeyPressed(shootKeyCode))
 	{
-		EntityBase* bullet = BulletFactory::PoolGetBullet();
-		bullet->SetPosition(this->attachedEntity->GetPosition2D());
-		Vector2 pos = { -22.5f , -45.0f };
-		bullet->AddPosition(pos);
-		bullet->SetActive(true);
+		Fire();
 	}
 }
 
 void ShooterComponent::OnDestroy()
 {
+
+}
+
+void ShooterComponent::Fire()
+{
+	EntityBase* bullet = BulletFactory::PoolGetBullet();
+	bullet->SetPosition(this->attachedEntity->GetPosition2D());
+	Vector2 pos = { -22.5f , -45.0f };
+	if (!useLeftTurret)
+	{
+		pos.x *= -1.0f;
+	}
+	bullet->AddPosition(pos);
+	bullet->SetActive(true);
+	useLeftTurret = !useLeftTurret;
 }

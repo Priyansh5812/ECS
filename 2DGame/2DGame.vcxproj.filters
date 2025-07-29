@@ -94,5 +94,8 @@
     <Image Include="Images\Player.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Images\Laser.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

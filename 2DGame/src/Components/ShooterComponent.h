@@ -10,6 +10,8 @@ public:
 	virtual void OnDestroy() override;// Deinitialization
 private:
 	int shootKeyCode;
-	
+	bool useLeftTurret = false;
+private:
+	void Fire();
 };
 

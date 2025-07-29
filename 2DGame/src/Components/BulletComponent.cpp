@@ -10,7 +10,7 @@ BulletComponent::BulletComponent(EntityBase* attachedEntity) : ComponentBase(att
 
 void BulletComponent::Start()
 {
-	sprite = this->attachedEntity->TryAddComponent<Sprite>("./Images/Player.png", Vector2{5.0f, 20.0f});
+	sprite = this->attachedEntity->TryAddComponent<Sprite>("./Images/Laser.png", Vector2{25.0f, 40.0f});
 }
 
 void BulletComponent::Update(const float& deltaTime)

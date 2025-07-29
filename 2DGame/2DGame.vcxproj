@@ -166,6 +166,7 @@
     <ClInclude Include="src\Managers\TextureHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Images\Laser.png" />
     <Image Include="Images\Player.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -23,11 +23,11 @@ void Sprite::Load()
 {	
 	try
 	{	
-		//texture = LoadTexture(&texturePath[0]);
 		texture = TextureHandler::GetTexture(texturePath);
 		if (IsTextureValid(texture))
 		{
 			texture.width = textureRes.x;
+			
 			texture.height = textureRes.y;
 		}
 	}
