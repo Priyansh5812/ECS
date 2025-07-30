@@ -9,7 +9,7 @@ The Entity Component System gets managed by a single class ```ECSManager``` and 
 
 1. The Entity Directory :  <br></br>
 Denotion : ```ECSManager::entityDir``` <br></br>
-
+![EntityDir](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/EntityDir.png)
 2. The Global Component List : <br></br>
 Denotion: ```ECSManager::globalComponentList```<br></br>
 
