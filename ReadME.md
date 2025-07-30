@@ -5,6 +5,18 @@ This readme will guide you through the architecture I followed in order to make 
 ## The ECS Core
 The Entity Component System gets managed by a single class ```ECSManager``` and is divided for Entities and Components separately.
 
+### Data Storage Paradigm
+
+1. The Entity Directory :  <br></br>
+Denotion : ```ECSManager::entityDir``` <br></br>
+
+2. The Global Component List : <br></br>
+Denotion: ```ECSManager::globalComponentList```<br></br>
+
+
+4. Runtime Calls : 
+
+
 ### Entity Handling
 
 ```cpp
