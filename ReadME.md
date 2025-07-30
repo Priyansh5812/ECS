@@ -12,7 +12,7 @@ Denotion : ```ECSManager::entityDir``` <br></br>
 ![EntityDir](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/EntityDir.png)
 2. The Global Component List : <br></br>
 Denotion: ```ECSManager::globalComponentList```<br></br>
-![Global Component List]([https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/EntityDir.png](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/global%20Component%20List.png))
+![Global Component List](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/globalComponentList.png)
 4. Runtime Calls : 
 
 
