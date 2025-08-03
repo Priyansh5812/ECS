@@ -191,6 +191,7 @@ inline void ECSManager::DestroyEntity(T1* entity)
 template<typename T, typename... Args>
 inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityBase* entity, Args&&... args)
 {	
+	// Brief check for an Invalid Entity
 	if (!entity)
 	{
 		throw std::runtime_error("Entity is null");
@@ -204,11 +205,13 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 			throw std::runtime_error("Entity does not exist");
 		}
 		else
-		{
+		{	// The entity class shouldn't be an abstract one
 			if (std::is_abstract<T>())
 			{
 				throw std::runtime_error("Component can't be an abstract base class");
 			}
+
+			// The entity class should be dervied from the component base class
 			else if(!std::is_base_of<ComponentBase , T>())
 			{	
 				std::string str = typeid(T).name();
@@ -219,7 +222,8 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 			{	
 				std::shared_ptr<EntityData> data = dir[entity];
 				std::vector<std::shared_ptr<ComponentBase>>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
-				for (auto i : data->associatedComps) 
+
+				for (auto i : data->associatedComps) // Check whether the component already exists or not
 				{
 					if (i.first == typeid(T).hash_code())
 					{
@@ -227,7 +231,7 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 						return { false , std::dynamic_pointer_cast<T>(globalComponentList[i.second.first]) };	
 					}
 				}
-
+				// If not present then create a component for registration
 				std::shared_ptr<T> comp = std::make_shared<T>(entity, std::forward<Args>(args)...);
 				globalComponentList.push_back(comp);	
 
@@ -248,7 +252,7 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 					StartMethodIndex = OnStartCalls.size() - 1;
 				}
 
-
+				// If components are allowed to tick then only register their update function for the runtime
 				if (comp->GetCanTick())
 				{	
 					std::pair<std::function<void(const float&) >, EntityBase*> pair = std::make_pair(nullptr,nullptr);
@@ -392,7 +396,7 @@ inline std::shared_ptr<T> ECSManager::GetComponent(EntityBase* entity)
 				{
 					if (data->associatedComps[i].first == typeid(T).hash_code())
 					{
-						// Remove component from global list of components
+						// Get the required component from the component list
 						return std::dynamic_pointer_cast<T>(globalComponentList[data->associatedComps[i].second.first]);
 					}
 				}

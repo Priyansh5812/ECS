@@ -28,8 +28,8 @@ const Vector3& EntityBase::GetPosition()
 const Vector2& EntityBase::GetPosition2D()
 {
 	this->m_position = { Transform.m12,Transform.m13,Transform.m14 };
-	Vector2 pos2D = { this->m_position.x , this->m_position.y };
-	return pos2D;
+	//Vector2 pos2D = { this->m_position.x , this->m_position.y };
+	return { this->m_position.x , this->m_position.y };
 }
 
 void EntityBase::SetPosition(const Vector3& position)

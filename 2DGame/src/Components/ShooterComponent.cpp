@@ -9,11 +9,13 @@ ShooterComponent::ShooterComponent(EntityBase* attachedEntity) : ComponentBase(a
 	canTick = true;
 }
 
-void ShooterComponent::Start()
+// This will execute before the runtime starts
+void ShooterComponent::Start() 
 {
 
 }
 
+// This will execute every frame
 void ShooterComponent::Update(const float& deltaTime)
 {
 	if (IsKeyPressed(shootKeyCode))
@@ -22,11 +24,13 @@ void ShooterComponent::Update(const float& deltaTime)
 	}
 }
 
+// This will execute once the game ends
 void ShooterComponent::OnDestroy()
 {
 
 }
 
+// Simple firing logic 
 void ShooterComponent::Fire()
 {
 	EntityBase* bullet = BulletFactory::PoolGetBullet();
