@@ -14,7 +14,7 @@ Denotion : ```ECSManager::entityDir``` <br></br>
 Denotion: ```ECSManager::globalComponentList```<br></br>
 ![Global Component List](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/globalComponentList.png)
 4. Runtime Calls : 
-
+![Runtime Calls](https://github.com/Priyansh5812/Space-Invaders/blob/main/Readme%20Imgs/Runtime%20Calls.png)
 
 ### Entity Handling
 
