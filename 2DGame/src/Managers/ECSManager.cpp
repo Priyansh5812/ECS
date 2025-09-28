@@ -58,6 +58,15 @@ void ECSManager::Cleanup()
 	}
 
 	
+	for (int i = 0; i < ECSManager::GetInstance()->globalComponentList.size(); i++)
+	{	
+		ComponentBase* comp = ECSManager::GetInstance()->globalComponentList[i];
+		if (comp)
+			delete comp;
+	}
+
+	ECSManager::GetInstance()->globalComponentList.clear();
+
 
 	OnStartCalls.clear();
 	OnUpdateCalls.clear();
@@ -84,8 +93,7 @@ const int& ECSManager::RegisterEntity(EntityBase* entity)
 	}
 
 	// Allocating this on heap due, to Entity data can also be very vast
-	//dir[entity] = new EntityData(globalIdCounter++);
-	dir[entity] = std::make_shared<EntityData>(globalIdCounter++);
+	dir[entity] = new EntityData(globalIdCounter++);
 
 	std::cout << "Entity successfully registered at " << globalIdCounter - 1 << std::endl;
 

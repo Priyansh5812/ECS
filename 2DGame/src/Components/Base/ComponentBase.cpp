@@ -6,6 +6,11 @@ ComponentBase::ComponentBase(EntityBase* attachedEntity)
 	this->attachedEntity = attachedEntity;	
 }
 
+ComponentBase::~ComponentBase()
+{
+
+}
+
 //void ComponentBase::Update(const float& deltaTime)
 //{ 
 //	//noop

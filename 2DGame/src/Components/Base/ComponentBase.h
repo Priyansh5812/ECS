@@ -8,6 +8,7 @@ class ComponentBase
 {	
 public:	
 	ComponentBase(EntityBase* entity);	
+	~ComponentBase();
 
 public:
 	virtual void Start() = 0; // Initialization 

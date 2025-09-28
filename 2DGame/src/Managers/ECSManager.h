@@ -31,11 +31,6 @@ public:
 struct EntityData
 {	
 	public:
-		EntityData()
-		{
-			//noop
-		}
-
 		EntityData(int entityID)
 		{
 			this->entityID = entityID;
@@ -65,13 +60,13 @@ public:
 	static void DestroyEntity(T1* entity);
 
 	template<typename T, typename... Args>
-	static std::pair<bool , std::shared_ptr<T>> RegisterComponent(EntityBase* entity, Args&&...args);
+	static std::pair<bool , T*> RegisterComponent(EntityBase* entity, Args&&...args);
 
 	template <typename T>
 	static bool UnregisterComponent(EntityBase* entity);
 
 	template<typename T>
-	static std::shared_ptr<T> GetComponent(EntityBase* entity);
+	static T* GetComponent(EntityBase* entity);
 	
 	static void Cleanup();
 	static void RunStartCalls();
@@ -84,8 +79,8 @@ private:
 	static bool isUnderRuntime;
 
 private:
-	std::vector<std::shared_ptr<ComponentBase>> globalComponentList;
-	std::unordered_map<EntityBase*, std::shared_ptr<EntityData>> entityDir; // Dictionary for storing the entities in (EntityBase*) , List of (Component HashCode , (Global Component List Index , LifeCycle Method Data))
+	std::vector<ComponentBase*> globalComponentList;
+	std::unordered_map<EntityBase*, EntityData*> entityDir; // Dictionary for storing the entities in (EntityBase*) , List of (Component HashCode , (Global Component List Index , LifeCycle Method Data))
 	
 	// the format of storing lifecycle calls is the (typeId(Component) , Function Pointer)
 	static std::vector<std::function<void()>> OnStartCalls; // Array to store the Start Calls
@@ -140,8 +135,8 @@ inline void ECSManager::DestroyEntity(T1* entity)
 
 	if (dir.find(entity) != dir.end())
 	{
-		std::shared_ptr<EntityData> data = dir[entity];
-		std::vector<std::shared_ptr<ComponentBase>>& globalComponentList = ECSManager::GetInstance()->globalComponentList; 
+		EntityData* data = dir[entity];
+		std::vector<ComponentBase*>& globalComponentList = ECSManager::GetInstance()->globalComponentList; 
 		for (int i = 0; i < data->associatedComps.size(); i++)
 		{
 			// Remove component from global list of components
@@ -181,15 +176,18 @@ inline void ECSManager::DestroyEntity(T1* entity)
 		data->associatedComps.clear();
 		EntityBase* const abc = entity;
 		dir.erase(abc);
+		delete data;
 	}
 	entity->OnDestroyed();
+
+	
 	delete entity;
 }
 
 
 
 template<typename T, typename... Args>
-inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityBase* entity, Args&&... args)
+inline std::pair<bool, T*> ECSManager::RegisterComponent(EntityBase* entity, Args&&... args)
 {	
 	// Brief check for an Invalid Entity
 	if (!entity)
@@ -220,19 +218,20 @@ inline std::pair<bool, std::shared_ptr<T>> ECSManager::RegisterComponent(EntityB
 			}
 			else
 			{	
-				std::shared_ptr<EntityData> data = dir[entity];
-				std::vector<std::shared_ptr<ComponentBase>>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
+				EntityData* data = dir[entity];
+				std::vector<ComponentBase*>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
 
 				for (auto i : data->associatedComps) // Check whether the component already exists or not
 				{
 					if (i.first == typeid(T).hash_code())
 					{
 						std::cout << "Component " << typeid(T).name() << " already exists" << std::endl;
-						return { false , std::dynamic_pointer_cast<T>(globalComponentList[i.second.first]) };	
+						return { false , dynamic_cast<T*>(globalComponentList[i.second.first]) };	
 					}
 				}
 				// If not present then create a component for registration
-				std::shared_ptr<T> comp = std::make_shared<T>(entity, std::forward<Args>(args)...);
+				// std::shared_ptr<T> comp = std::make_shared<T>(entity, std::forward<Args>(args)...);
+				T* comp = new T(entity, std::forward<Args>(args)...);
 				globalComponentList.push_back(comp);	
 
 
@@ -311,8 +310,8 @@ inline bool ECSManager::UnregisterComponent(EntityBase* entity)
 			}
 			else
 			{	
-				std::shared_ptr<EntityData> data = dir[entity];
-				std::vector<std::shared_ptr<ComponentBase>>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
+				EntityData* data = dir[entity];
+				std::vector<ComponentBase*>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
 				for (int i = 0; i < data->associatedComps.size(); i++)
 				{
 					if (data->associatedComps[i].first == typeid(T).hash_code())
@@ -362,7 +361,7 @@ inline bool ECSManager::UnregisterComponent(EntityBase* entity)
 }
 
 template<typename T>
-inline std::shared_ptr<T> ECSManager::GetComponent(EntityBase* entity)
+inline T* ECSManager::GetComponent(EntityBase* entity)
 {
 	if (!entity)
 	{
@@ -390,14 +389,14 @@ inline std::shared_ptr<T> ECSManager::GetComponent(EntityBase* entity)
 			}
 			else
 			{
-				std::shared_ptr<EntityData> data = dir[entity];
-				std::vector<std::shared_ptr<ComponentBase>>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
+				EntityData* data = dir[entity];
+				std::vector<ComponentBase*>& globalComponentList = ECSManager::GetInstance()->globalComponentList;
 				for (int i = 0; i < data->associatedComps.size(); i++)
 				{
 					if (data->associatedComps[i].first == typeid(T).hash_code())
 					{
 						// Get the required component from the component list
-						return std::dynamic_pointer_cast<T>(globalComponentList[data->associatedComps[i].second.first]);
+						return dynamic_cast<T*>(globalComponentList[data->associatedComps[i].second.first]);
 					}
 				}
 

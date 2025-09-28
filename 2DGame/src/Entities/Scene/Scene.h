@@ -16,7 +16,7 @@ class Scene
 		virtual void Unload() final;
 
 	private:
-		std::shared_ptr<CameraComponent> camera;
+		CameraComponent* camera;
 		Entity* player;
 
 

@@ -17,7 +17,7 @@ private:
 	void MonitorTimeout(const float& deltaTime);
 	void Reset();
 private:
-	std::shared_ptr<Sprite> sprite;
+	Sprite* sprite;
 	float bulletTimer = 3.0f;
 };
 
