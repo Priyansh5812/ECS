@@ -33,7 +33,7 @@ void MovementComponent::DirectionConstruction(const float& deltaTime)
 
 	//----- Boundary Check -------
 	Vector2 currPos = this->attachedEntity->GetPosition2D();
-	std::shared_ptr<Sprite> sprite = this->attachedEntity->TryGetComponent<Sprite>();
+	Sprite* sprite = this->attachedEntity->TryGetComponent<Sprite>();
 	if (sprite)
 	{
 		Vector2 occupiedArea = sprite->GetArea();

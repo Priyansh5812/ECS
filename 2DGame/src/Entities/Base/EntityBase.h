@@ -33,9 +33,9 @@ class EntityBase
 
 	public:
 		template<typename T, typename... Args>
-		std::shared_ptr<T> TryAddComponent(Args&&... args);
+		T* TryAddComponent(Args&&... args);
 		template<typename T>
-		std::shared_ptr<T> TryGetComponent();
+		T* TryGetComponent();
 		template<typename T>
 		void TryRemoveComponent();
 
@@ -56,7 +56,7 @@ class EntityBase
 
 
 template<typename T, typename... Args>
-std::shared_ptr<T> EntityBase::TryAddComponent(Args&&... args)
+T* EntityBase::TryAddComponent(Args&&... args)
 {
 	try
 	{
@@ -85,7 +85,7 @@ void EntityBase::TryRemoveComponent()
 }
 
 template<typename T>
-std::shared_ptr<T> EntityBase::TryGetComponent()
+T* EntityBase::TryGetComponent()
 {
 	try
 	{
