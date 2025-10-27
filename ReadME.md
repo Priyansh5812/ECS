@@ -1,4 +1,4 @@
-# Space Invaders via Custom Entity Component System (ECS)
+# Custom Entity Component System (ECS)
 This readme will guide you through the architecture I followed in order to make the ECS.
 
 
@@ -428,3 +428,4 @@ private:
 ```
 
 Thanks for reading this far. You are welcome to contribute to this if you find any room for improvement :)
+
